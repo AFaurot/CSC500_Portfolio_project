@@ -1,6 +1,6 @@
 class ItemToPurchase:
-    formatted_list=[]
-
+    formatted_list = []
+    temp_list = []
     #Constructor with initial values and defines types
     def __init__(self, item_name="none", item_price=float(0), item_quantity=int(0)):
         self.item_name = item_name
@@ -11,14 +11,21 @@ class ItemToPurchase:
     #Function to format and print the items cost and return the items total
     def print_item_cost(self):
         item_total = round(self.item_price * self.item_quantity, 2)
-        ItemToPurchase.formatted_list.append(('{} {} @ ${} = ${}'.format
+        self.temp_list.append(('{} {} @ ${} = ${}'.format
                                     (self.item_name,
                                      self.item_quantity,
                                      self.item_price,
                                      item_total)))
         #print('{} {} @ ${} = ${}'.format(self.item_name, self.item_quantity, self.item_price, item_total))
+        #for i in ItemToPurchase.formatted_list:
+        #   print(i)
+        self.formatted_list = self.temp_list[:]
 
         return item_total
+    def print_list(self):
+
+        for i in self.formatted_list[:]:
+            print(i)
 
 class ShoppingCart:
     cart_items = []
@@ -80,7 +87,7 @@ def main ():
     item2 = ItemToPurchase(item2_name, item2_cost, item2_quantity)
 
     print("TOTAL COST")
-    print(ItemToPurchase.formatted_list)
+    ItemToPurchase().print_list()
     #for i in formatted_list:
      #   print(i)
 
