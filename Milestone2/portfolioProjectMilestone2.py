@@ -143,8 +143,10 @@ def main ():
             elif command == 'o':
                 sc.print_total()
                 print_formatted_list()
+                #add Initial total from milestone 1 to total on milestone2
                 print("Total: ${}".format(init_total + total))
 
+            #Catch invalid input and prompt for correct input
             else:
                 print("Invalid command")
                 print("\nMenu \na = Add item to cart \nr = Remove item from cart")
