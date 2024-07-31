@@ -42,19 +42,44 @@ class ShoppingCart:
         if item_to_del not in self.cart_items:
             print("Item not found in cart. Nothing modified")
         else:
+            del self.cart_item_quantity[item_to_del]
+            del self.item_price[item_to_del]
+            del self.item_description[item_to_del]
             self.cart_items.remove(item_to_del)
 
     def modify_item(self, item_to_purchase):
         if item_to_purchase not in self.cart_items:
             print("Item not found in cart. Nothing modified")
         else:
-            print("Modification MENU \n d = Description \n p=price \n q= quantity")
+            print("Modification MENU \n d = Description \n p = price \n n = quantity \n q = exit")
+            command = input("Enter Command : ")
+            while command != 'q':
+                if command == 'd':
+                    new_desc = input("Enter new description for {} : ".format(item_to_purchase))
+                    self.item_description[item_to_purchase] = new_desc
+                elif command == 'p':
+                    new_price = float(input("Enter new price for {} : ".format(item_to_purchase)))
+                    self.item_price[item_to_purchase] = new_price
+                elif command == 'n':
+                    new_quantity = int(input("Enter new quantity for {} : ".format(item_to_purchase)))
+                    self.cart_item_quantity[item_to_purchase] = new_quantity
+                else:
+                    print("Invalid command")
+                print("Modification MENU \n d = Description \n p = price \n n = quantity \n q = exit")
+                command = input("Enter Command : ")
+
 
     def get_num_items_in_cart(self):
-        pass
+        return sum(self.cart_item_quantity.values())
 
     def get_cost_of_cart(self):
-        pass
+        total_cost = float(0)
+        for i in self.cart_items :
+            index = 0
+            temp_cost = float((self.cart_item_quantity[self.cart_items[index]]) * (self.item_price[self.cart_items[index]]))
+            total_cost += temp_cost + total_cost
+            index += 1
+        return total_cost
 
     def print_total(self):
         pass
@@ -76,8 +101,8 @@ def main():
     item2 = ItemToPurchase(item2_name, item2_cost, item2_quantity)
     print("TOTAL COST")
     #Variable to ItemToPurchase.print_item_cost() for both items and add the result
-    total = (ItemToPurchase.print_item_cost(item1) + ItemToPurchase.print_item_cost(item2))
-    print("Total: ${}".format(total))
+    init_total = (ItemToPurchase.print_item_cost(item1) + ItemToPurchase.print_item_cost(item2))
+    print("Total: ${}".format(init_total))
     #End of milestone 1
     print("\n------------END SUBMISSION FOR MILESTONE 1------------\n")
 
@@ -91,7 +116,7 @@ def main():
 
     def print_menu():
         print("\nMenu \na = Add item to cart \nr = Remove item from cart")
-        print("c = Change item quantity \ni = Output items' descriptions")
+        print("c = Change item quantity, description, or price \ni = Output items' descriptions")
         print("o = Output shopping cart \nq = Quit\n")
         command = input("Enter command :")
         #total = 0
@@ -111,20 +136,25 @@ def main():
                     #ShoppingCart.cart_item_quantity += item_quantity
             ##To be implemented later in week 8
             elif command == 'r':
-                pass
+                item_to_del = input("Enter an item to delete : ")
+                sc.remove_item(item_to_del)
             ##To be implemented later in week 8
             elif command == 'c':
-                pass
+                item_to_modify = input("Enter an item to modify : ")
+                sc.modify_item(item_to_modify)
             ##print descriptions
             elif command == 'i':
-                #pass
-                sc.print_descriptions()
+                pass
+                #sc.print_descriptions()
             ##Print cart output
             elif command == 'o':
-               print("Testing cart item list" , sc.cart_items)
-               print("Testing cart price", sc.item_price)
-               print("Testing cart quantity", sc.cart_item_quantity)
-               # sc.print_total()
+                total = sc.get_cost_of_cart()
+                quantity = sc.get_num_items_in_cart()
+                print("Testing cart item list" , sc.cart_items)
+                print("Testing cart price", sc.item_price)
+                print("Testing cart quantity", quantity)
+                print("Testing cart total", total)
+                # sc.print_total()
                # print_formatted_list()
                 #add Initial total from milestone 1 to total on milestone2
                # print("Total: ${}".format(init_total + total))
@@ -133,7 +163,7 @@ def main():
             else:
                 print("Invalid command")
                 print("\nMenu \na = Add item to cart \nr = Remove item from cart")
-                print("c = Change item quantity \ni = Output items' descriptions")
+                print("c = Change item quantity, description, or price \ni = Output items' descriptions")
                 print("o = Output shopping cart \nq = Quit\n")
             command = input("Enter command :")
 
