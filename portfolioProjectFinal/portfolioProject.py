@@ -10,7 +10,7 @@ class ItemToPurchase:
 
     #Function to format and print the items cost and return the items total
 
-    #leaving function in for Milestone 1 submission. A better function in in shopping cart class for final project
+    #leaving function in for Milestone 1 submission. A better function in shopping cart class for final project
     def print_item_cost(self):
         item_total = round(self.item_price * self.item_quantity, 2)
         print('{} {} @ ${} = ${}'.format(self.item_name, self.item_quantity, self.item_price, item_total))
@@ -68,21 +68,43 @@ class ShoppingCart:
                 print("Modification MENU \n d = Description \n p = price \n n = quantity \n q = exit")
                 command = input("Enter Command : ")
 
-
     def get_num_items_in_cart(self):
         return sum(self.cart_item_quantity.values())
 
+#TODO Make code more readable here
     def get_cost_of_cart(self):
         total_cost = float(0)
-        for i in self.cart_items :
-            index = 0
-            temp_cost = float((self.cart_item_quantity[self.cart_items[index]]) * (self.item_price[self.cart_items[index]]))
-            total_cost += temp_cost + total_cost
+        index = 0
+        for i in range(len(self.cart_items)):
+            total_cost += (self.cart_item_quantity[self.cart_items[index]]) * (self.item_price[self.cart_items[index]])
             index += 1
         return total_cost
 
+    def print_descriptions(self):
+        print("{}'s Shopping Cart - {}".format(self.customer_name, self.current_date))
+        print("Item Descriptions :")
+        for item, desc in self.item_description.items() :
+            print("{} : {}".format(item, desc))
+
+    #Function to print total. TODO make code more readable
     def print_total(self):
-        pass
+        print("{}'s Shopping Cart - {}".format(self.customer_name, self.current_date))
+        index = 0
+        for item in self.cart_items:
+            line_total = float(round((self.cart_item_quantity[self.cart_items[index]]
+                                      * self.item_price[self.cart_items[index]]), 2))
+            print("{} {} @ ${} = ${}".format(item,self.cart_item_quantity[self.cart_items[index]],
+                                             self.item_price[self.cart_items[index]], line_total))
+            index += 1
+        total = self.get_cost_of_cart()
+        print("Total is : ${}".format(total))
+
+
+def print_menu():
+    print("\n----MENU---- \na = Add item to cart \nr = Remove item from cart")
+    print("c = Change item quantity, description, or price \ni = Output items' descriptions")
+    print("o = Output shopping cart \nq = Quit\nm = Print this menu")
+
 
 def main():
 
@@ -106,20 +128,25 @@ def main():
     #End of milestone 1
     print("\n------------END SUBMISSION FOR MILESTONE 1------------\n")
 
-    #Begin main portfolio project by initializing shopping cart based on todays date and customer_name
+    #Begin main portfolio project by initializing shopping cart based on today's date and customer_name
     print("------------BEGIN SUBMISSION FOR FINAL PROJECT------------\n")
-    customer_name = input("Enter your name: ")
+    customer_name = input("\nEnter your name: ")
     today = str(datetime.date.today())
     sc = ShoppingCart(customer_name, today)
     print("Customer Name : ", customer_name)
     print("Today's Date : ", today)
+    add_milestone1_items = input("\nWould you like to add Milestone 1 items to the shopping cart?"
+                                 "y = yes any other character = no ")
+    if add_milestone1_items == 'y':
+        sc.add_item(item1)
+        sc.add_item(item2)
+    else:
+        print("Your input was '{}'. "
+              "Milestone 1 items not added to the cart".format(add_milestone1_items))
 
-    def print_menu():
-        print("\nMenu \na = Add item to cart \nr = Remove item from cart")
-        print("c = Change item quantity, description, or price \ni = Output items' descriptions")
-        print("o = Output shopping cart \nq = Quit\n")
+    def run_looping_menu():
+        print_menu()
         command = input("Enter command :")
-        #total = 0
         while command != 'q':
 
             if command == 'a':
@@ -130,44 +157,25 @@ def main():
                     item_cost = float(input("Enter the item price: "))
                     item_quantity = int(input("Enter the item quantity: "))
                     item = ItemToPurchase(item_name, item_cost, item_quantity)
-                #    total += (ItemToPurchase.print_item_cost(item)[0])
-                 #   formatted_list.append((ItemToPurchase.print_item_cost(item)[1]))
                     sc.add_item(item)
-                    #ShoppingCart.cart_item_quantity += item_quantity
-            ##To be implemented later in week 8
             elif command == 'r':
                 item_to_del = input("Enter an item to delete : ")
                 sc.remove_item(item_to_del)
-            ##To be implemented later in week 8
             elif command == 'c':
                 item_to_modify = input("Enter an item to modify : ")
                 sc.modify_item(item_to_modify)
             ##print descriptions
             elif command == 'i':
-                pass
-                #sc.print_descriptions()
+                sc.print_descriptions()
             ##Print cart output
             elif command == 'o':
-                total = sc.get_cost_of_cart()
-                quantity = sc.get_num_items_in_cart()
-                print("Testing cart item list" , sc.cart_items)
-                print("Testing cart price", sc.item_price)
-                print("Testing cart quantity", quantity)
-                print("Testing cart total", total)
-                # sc.print_total()
-               # print_formatted_list()
-                #add Initial total from milestone 1 to total on milestone2
-               # print("Total: ${}".format(init_total + total))
-
-            #Catch invalid input and prompt for correct input
+                sc.print_total()
+            elif command == 'm':
+                print_menu()
             else:
-                print("Invalid command")
-                print("\nMenu \na = Add item to cart \nr = Remove item from cart")
-                print("c = Change item quantity, description, or price \ni = Output items' descriptions")
-                print("o = Output shopping cart \nq = Quit\n")
-            command = input("Enter command :")
-
-    print_menu()
+                print("Invalid command, make sure there are no whitespaces after your input")
+            command = input("Enter next command (m for the command menu):")
+    run_looping_menu()
 
 
 if __name__ == '__main__': main()
